@@ -1,0 +1,48 @@
+{
+  "id": "space_adventure",
+  "name": "Space Adventure",
+  "background": "background.png",
+  "cards": [
+    "cards/rocket.png",
+    "cards/astronaut.png",
+    "cards/planet.png",
+    "cards/moon.png",
+    "cards/star.png",
+    "cards/comet.png",
+    "cards/satellite.png",
+    "cards/space_station.png",
+    "cards/alien.png",
+    "cards/spaceship.png",
+    "cards/meteor.png",
+    "cards/galaxy.png",
+    "cards/telescope.png",
+    "cards/mars_rover.png",
+    "cards/space_shuttle.png",
+    "cards/asteroid.png",
+    "cards/nebula.png"
+  ],
+  "icon": "cards/rocket.png",
+  "mascots": [
+    {
+      "image": "cards/rocket.png",
+      "rotation": 0,
+      "y": 500
+    },
+    {
+      "image": "cards/astronaut.png",
+      "rotation": 15,
+      "y": 600
+    },
+    {
+      "image": "cards/planet.png",
+      "rotation": 30,
+      "y": 700
+    },
+    {
+      "image": "cards/alien.png",
+      "rotation": 45,
+      "y": 800
+    }
+  ],
+  "hash": ""
+}

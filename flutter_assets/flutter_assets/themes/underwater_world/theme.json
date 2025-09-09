@@ -1,0 +1,48 @@
+{
+  "id": "underwater_world",
+  "name": "Underwater World",
+  "background": "background.png",
+  "cards": [
+    "cards/fish.png",
+    "cards/shark.png",
+    "cards/whale.png",
+    "cards/dolphin.png",
+    "cards/octopus.png",
+    "cards/crab.png",
+    "cards/starfish.png",
+    "cards/jellyfish.png",
+    "cards/seahorse.png",
+    "cards/turtle.png",
+    "cards/lobster.png",
+    "cards/squid.png",
+    "cards/penguin.png",
+    "cards/seal.png",
+    "cards/walrus.png",
+    "cards/sea_lion.png",
+    "cards/ray.png"
+  ],
+  "icon": "cards/fish.png",
+  "mascots": [
+    {
+      "image": "cards/fish.png",
+      "rotation": 0,
+      "y": 500
+    },
+    {
+      "image": "cards/shark.png",
+      "rotation": 15,
+      "y": 600
+    },
+    {
+      "image": "cards/whale.png",
+      "rotation": 30,
+      "y": 700
+    },
+    {
+      "image": "cards/dolphin.png",
+      "rotation": 45,
+      "y": 800
+    }
+  ],
+  "hash": ""
+}
