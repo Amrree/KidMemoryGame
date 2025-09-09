@@ -110,10 +110,20 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                               ),
                             ],
                           ),
-                          child: const Icon(
-                            Icons.psychology,
-                            size: 60,
-                            color: Color(0xFF4CAF50),
+                          child: ClipOval(
+                            child: Image.asset(
+                              'images/app_icon.png',
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(
+                                  Icons.psychology,
+                                  size: 60,
+                                  color: Color(0xFF4CAF50),
+                                );
+                              },
+                            ),
                           ),
                         ),
                       ),

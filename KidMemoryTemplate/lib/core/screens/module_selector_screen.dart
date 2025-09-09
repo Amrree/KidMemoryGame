@@ -171,12 +171,22 @@ class _ModuleSelectorScreenState extends State<ModuleSelectorScreen>
                                 ),
                               ],
                             ),
-                            child: Icon(
-                              _getModuleIcon(module.id),
-                              size: 30,
-                              color: module.isUnlocked
-                                  ? const Color(0xFF4CAF50)
-                                  : Colors.grey[600],
+                            child: ClipOval(
+                              child: Image.asset(
+                                module.iconPath,
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Icon(
+                                    _getModuleIcon(module.id),
+                                    size: 30,
+                                    color: module.isUnlocked
+                                        ? const Color(0xFF4CAF50)
+                                        : Colors.grey[600],
+                                  );
+                                },
+                              ),
                             ),
                           ),
                           const SizedBox(height: 12),

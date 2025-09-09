@@ -127,8 +127,21 @@ class _GameScreenState extends State<GameScreen>
     return Scaffold(
       body: Stack(
         children: [
-          // Game view
-          GameWidget(game: _game),
+        // Game view with background
+        Stack(
+          children: [
+            // Background image
+            if (widget.module.backgroundPath.isNotEmpty)
+              Positioned.fill(
+                child: Image.asset(
+                  widget.module.backgroundPath,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            // Game widget
+            GameWidget(game: _game),
+          ],
+        ),
           
           // UI overlay
           Positioned(

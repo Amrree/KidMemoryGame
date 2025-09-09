@@ -30,10 +30,10 @@ class MemoryGame extends FlameGame with HasTapDetectors {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    _setupGame();
+    await _setupGame();
   }
 
-  void _setupGame() {
+  Future<void> _setupGame() async {
     _cards = [];
     _flippedCards = [];
     _matchesFound = 0;
@@ -47,14 +47,16 @@ class MemoryGame extends FlameGame with HasTapDetectors {
     cardData.shuffle(Random());
 
     // Create card components
-    final cardSize = 80.0;
-    final spacing = 20.0;
-    final startX = (size.x - (4 * cardSize + 3 * spacing)) / 2;
-    final startY = (size.y - (3 * cardSize + 2 * spacing)) / 2;
+    final cardSize = 100.0;
+    final spacing = 15.0;
+    final columns = 4;
+    final rows = (cardData.length / columns).ceil();
+    final startX = (size.x - (columns * cardSize + (columns - 1) * spacing)) / 2;
+    final startY = (size.y - (rows * cardSize + (rows - 1) * spacing)) / 2;
 
     for (int i = 0; i < cardData.length; i++) {
-      final row = i ~/ 4;
-      final col = i % 4;
+      final row = i ~/ columns;
+      final col = i % columns;
       
       final card = MemoryCard(
         imagePath: cardData[i],
@@ -152,19 +154,33 @@ class MemoryCard extends PositionComponent with TapCallbacks {
   Future<void> onLoad() async {
     await super.onLoad();
     
-    // Create back sprite (card back)
-    _backSprite = SpriteComponent(
-      sprite: await Sprite.load('images/card_back.png'),
-      size: size,
-    );
-    
-    // Create front sprite (card image)
-    _frontSprite = SpriteComponent(
-      sprite: await Sprite.load(imagePath),
-      size: size,
-    );
-    
-    add(_backSprite);
+    try {
+      // Create back sprite (card back)
+      _backSprite = SpriteComponent(
+        sprite: await Sprite.load('images/card_back.png'),
+        size: size,
+      );
+      
+      // Create front sprite (card image)
+      _frontSprite = SpriteComponent(
+        sprite: await Sprite.load(imagePath),
+        size: size,
+      );
+      
+      add(_backSprite);
+    } catch (e) {
+      print('Error loading sprites for card $cardId: $e');
+      // Create fallback sprites
+      _backSprite = SpriteComponent(
+        sprite: await Sprite.load('images/card_back.png'),
+        size: size,
+      );
+      _frontSprite = SpriteComponent(
+        sprite: await Sprite.load('images/card_back.png'),
+        size: size,
+      );
+      add(_backSprite);
+    }
   }
 
   @override
