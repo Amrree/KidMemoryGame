@@ -99,23 +99,32 @@ class MemoryGame extends FlameGame with HasTapDetectors {
     final card2 = _flippedCards[1];
 
     if (card1.imagePath == card2.imagePath) {
-      // Match found
+      // Match found - add celebration effects!
+      add(ConfettiEffect(position: card1.position));
+      add(ConfettiEffect(position: card2.position));
+      
       card1.setMatched();
       card2.setMatched();
       _matchesFound++;
       onMatch?.call();
 
       if (_matchesFound == _totalMatches) {
-        // Game won
-        Future.delayed(const Duration(milliseconds: 500), () {
+        // Game won - add big celebration!
+        add(BigCelebrationEffect());
+        Future.delayed(const Duration(milliseconds: 2000), () {
           onGameWon?.call();
         });
       }
     } else {
-      // No match
-      card1.flip();
-      card2.flip();
-      onMismatch?.call();
+      // No match - add gentle shake effect
+      add(ShakeEffect(target: card1));
+      add(ShakeEffect(target: card2));
+      
+      Future.delayed(const Duration(milliseconds: 800), () {
+        card1.flip();
+        card2.flip();
+        onMismatch?.call();
+      });
     }
 
     _flippedCards.clear();
@@ -324,5 +333,242 @@ class GlowComponent extends Component {
       ),
       paint,
     );
+  }
+}
+
+/// Fun confetti effect for matches
+class ConfettiEffect extends Component {
+  final Vector2 position;
+  late List<ConfettiParticle> particles;
+  
+  ConfettiEffect({required this.position});
+  
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    
+    particles = List.generate(15, (index) => ConfettiParticle(
+      color: [
+        const Color(0xFFFFD700),
+        const Color(0xFFFF6B35),
+        const Color(0xFFE91E63),
+        const Color(0xFF4CAF50),
+        const Color(0xFF2196F3),
+      ][index % 5],
+    ));
+    
+    addAll(particles);
+    
+    // Remove effect after animation
+    Future.delayed(const Duration(milliseconds: 2000), () {
+      removeFromParent();
+    });
+  }
+}
+
+/// Individual confetti particle
+class ConfettiParticle extends Component {
+  final Color color;
+  late Vector2 velocity;
+  late double rotationSpeed;
+  
+  ConfettiParticle({required this.color});
+  
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    
+    velocity = Vector2(
+      (Random().nextDouble() - 0.5) * 200,
+      -Random().nextDouble() * 300 - 100,
+    );
+    rotationSpeed = (Random().nextDouble() - 0.5) * 10;
+    
+    size = Vector2(8, 8);
+  }
+  
+  @override
+  void update(double dt) {
+    super.update(dt);
+    
+    position += velocity * dt;
+    velocity.y += 500 * dt; // Gravity
+    angle += rotationSpeed * dt;
+    
+    if (position.y > parent!.size.y) {
+      removeFromParent();
+    }
+  }
+  
+  @override
+  void render(Canvas canvas) {
+    final paint = Paint()..color = color;
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.x, size.y),
+      paint,
+    );
+  }
+}
+
+/// Big celebration effect for game completion
+class BigCelebrationEffect extends Component {
+  late List<CelebrationParticle> particles;
+  
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    
+    particles = List.generate(50, (index) => CelebrationParticle());
+    addAll(particles);
+    
+    // Remove effect after animation
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      removeFromParent();
+    });
+  }
+}
+
+/// Celebration particle for game completion
+class CelebrationParticle extends Component {
+  late Color color;
+  late Vector2 velocity;
+  late double rotationSpeed;
+  late double scale;
+  
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    
+    color = [
+      const Color(0xFFFFD700),
+      const Color(0xFFFF6B35),
+      const Color(0xFFE91E63),
+      const Color(0xFF4CAF50),
+      const Color(0xFF2196F3),
+      const Color(0xFF9C27B0),
+    ][Random().nextInt(6)];
+    
+    velocity = Vector2(
+      (Random().nextDouble() - 0.5) * 400,
+      -Random().nextDouble() * 400 - 200,
+    );
+    rotationSpeed = (Random().nextDouble() - 0.5) * 15;
+    scale = Random().nextDouble() * 0.5 + 0.5;
+    
+    size = Vector2(16, 16) * scale;
+  }
+  
+  @override
+  void update(double dt) {
+    super.update(dt);
+    
+    position += velocity * dt;
+    velocity.y += 300 * dt; // Gravity
+    angle += rotationSpeed * dt;
+    
+    if (position.y > parent!.size.y) {
+      removeFromParent();
+    }
+  }
+  
+  @override
+  void render(Canvas canvas) {
+    final paint = Paint()..color = color;
+    canvas.drawCircle(
+      Offset(size.x / 2, size.y / 2),
+      size.x / 2,
+      paint,
+    );
+  }
+}
+
+/// Shake effect for mismatched cards
+class ShakeEffect extends Component {
+  final MemoryCard target;
+  late AnimationController controller;
+  late Animation<double> animation;
+  
+  ShakeEffect({required this.target});
+  
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    
+    controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    
+    animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: controller,
+      curve: Curves.elasticIn,
+    ));
+    
+    controller.forward().then((_) {
+      removeFromParent();
+    });
+  }
+  
+  @override
+  void update(double dt) {
+    super.update(dt);
+    
+    final shakeOffset = (animation.value * 10 * (Random().nextDouble() - 0.5));
+    target.position.x += shakeOffset;
+  }
+  
+  @override
+  void onRemove() {
+    controller.dispose();
+    super.onRemove();
+  }
+}
+
+/// Bounce effect for card taps
+class BounceEffect extends Component {
+  final MemoryCard target;
+  late AnimationController controller;
+  late Animation<double> animation;
+  
+  BounceEffect({required this.target});
+  
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    
+    controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    
+    animation = Tween<double>(
+      begin: 1.0,
+      end: 1.2,
+    ).animate(CurvedAnimation(
+      parent: controller,
+      curve: Curves.elasticOut,
+    ));
+    
+    controller.forward().then((_) {
+      controller.reverse().then((_) {
+        removeFromParent();
+      });
+    });
+  }
+  
+  @override
+  void update(double dt) {
+    super.update(dt);
+    
+    target.scale = Vector2.all(animation.value);
+  }
+  
+  @override
+  void onRemove() {
+    controller.dispose();
+    super.onRemove();
   }
 }

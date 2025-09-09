@@ -8,6 +8,7 @@ import 'core/managers/analytics_manager.dart';
 import 'core/managers/audio_manager.dart';
 import 'core/managers/module_manager.dart';
 import 'core/managers/save_manager.dart';
+import 'core/screens/loading_screen.dart';
 import 'core/screens/main_menu_screen.dart';
 import 'core/models/game_module.dart';
 
@@ -53,7 +54,7 @@ class KidMemoryTemplateApp extends StatelessWidget {
             brightness: Brightness.light,
           ),
         ),
-        home: const MainMenuScreen(),
+        home: const LoadingScreen(),
       ),
     );
   }

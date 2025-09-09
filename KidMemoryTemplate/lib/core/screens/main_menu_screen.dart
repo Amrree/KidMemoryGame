@@ -29,12 +29,12 @@ class _MainMenuScreenState extends State<MainMenuScreen>
 
   void _setupAnimations() {
     _logoController = AnimationController(
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 2500),
       vsync: this,
     );
     
     _buttonController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
 
@@ -45,14 +45,25 @@ class _MainMenuScreenState extends State<MainMenuScreen>
 
     _buttonAnimation = CurvedAnimation(
       parent: _buttonController,
-      curve: Curves.easeOutCubic,
+      curve: Curves.bounceOut,
     );
 
-    // Staggered animation sequence
+    // Super fun staggered animation sequence
     _logoController.forward();
-    Future.delayed(const Duration(milliseconds: 800), () {
+    Future.delayed(const Duration(milliseconds: 1000), () {
       if (mounted) {
         _buttonController.forward();
+      }
+    });
+    
+    // Add continuous bouncy animation for logo
+    _logoController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Future.delayed(const Duration(milliseconds: 2000), () {
+          if (mounted) {
+            _logoController.repeat(reverse: true);
+          }
+        });
       }
     });
   }
@@ -99,33 +110,48 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                     children: [
                       ScaleTransition(
                         scale: _logoAnimation,
-                        child: Container(
-                          width: 120,
-                          height: 120,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.3),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
+                        child: Transform.rotate(
+                          angle: _logoAnimation.value * 0.1, // Gentle rotation
+                          child: Container(
+                            width: 140,
+                            height: 140,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color(0xFFFFD700),
+                                  Color(0xFFFFA500),
+                                  Color(0xFFFF6B35),
+                                ],
                               ),
-                            ],
-                          ),
-                          child: ClipOval(
-                            child: Image.asset(
-                              'images/app_icon.png',
-                              width: 120,
-                              height: 120,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(
-                                  Icons.psychology,
-                                  size: 60,
-                                  color: Color(0xFF4CAF50),
-                                );
-                              },
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFFFFD700).withOpacity(0.6),
+                                  blurRadius: 30,
+                                  offset: const Offset(0, 15),
+                                  spreadRadius: 8,
+                                ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ClipOval(
+                                child: Image.asset(
+                                  'images/app_icon.png',
+                                  width: 120,
+                                  height: 120,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(
+                                      Icons.psychology,
+                                      size: 60,
+                                      color: Colors.white,
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -133,19 +159,32 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                       const SizedBox(height: 24),
                       FadeTransition(
                         opacity: _logoAnimation,
-                        child: const Text(
-                          'Kid Memory',
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black26,
-                                blurRadius: 10,
-                                offset: Offset(0, 2),
+                        child: Transform.scale(
+                          scale: 1.0 + (_logoAnimation.value * 0.1), // Bouncy scale
+                          child: ShaderMask(
+                            shaderCallback: (bounds) => const LinearGradient(
+                              colors: [
+                                Color(0xFFFFD700),
+                                Color(0xFFFF6B35),
+                                Color(0xFFE91E63),
+                              ],
+                            ).createShader(bounds),
+                            child: const Text(
+                              'Kid Memory',
+                              style: TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: 2.0,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black,
+                                    offset: Offset(3, 3),
+                                    blurRadius: 6,
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -227,8 +266,8 @@ class _MainMenuScreenState extends State<MainMenuScreen>
               scale: _buttonAnimation.value,
               child: Container(
                 width: double.infinity,
-                height: 60,
-                margin: const EdgeInsets.symmetric(horizontal: 32),
+                height: 70,
+                margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 200),
                   child: ElevatedButton(
@@ -239,10 +278,10 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       foregroundColor: const Color(0xFF4CAF50),
-                      elevation: 12,
-                      shadowColor: Colors.black.withOpacity(0.4),
+                      elevation: 15,
+                      shadowColor: const Color(0xFFFF6B35).withOpacity(0.5),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(35),
                       ),
                       animationDuration: const Duration(milliseconds: 200),
                     ),
@@ -250,17 +289,25 @@ class _MainMenuScreenState extends State<MainMenuScreen>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         AnimatedRotation(
-                          turns: _buttonAnimation.value * 0.1,
-                          duration: const Duration(milliseconds: 300),
-                          child: Icon(icon, size: 24),
+                          turns: _buttonAnimation.value * 0.2,
+                          duration: const Duration(milliseconds: 500),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFF6B35).withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Icon(icon, size: 28, color: const Color(0xFFFF6B35)),
+                          ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 16),
                         Text(
                           text,
                           style: const TextStyle(
-                            fontSize: 18,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            letterSpacing: 0.5,
+                            letterSpacing: 1.0,
+                            color: Color(0xFF2E7D32),
                           ),
                         ),
                       ],

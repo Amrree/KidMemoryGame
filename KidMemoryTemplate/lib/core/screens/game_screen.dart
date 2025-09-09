@@ -6,6 +6,7 @@ import '../managers/analytics_manager.dart';
 import '../managers/save_manager.dart';
 import '../models/game_module.dart';
 import '../../game/memory_game.dart';
+import 'celebration_screen.dart';
 
 class GameScreen extends StatefulWidget {
   final GameModule module;
@@ -30,6 +31,7 @@ class _GameScreenState extends State<GameScreen>
   int _score = 0;
   int _moves = 0;
   int _matches = 0;
+  DateTime? _gameStartTime;
 
   @override
   void initState() {
@@ -62,6 +64,7 @@ class _GameScreenState extends State<GameScreen>
   }
 
   void _startGameSession() {
+    _gameStartTime = DateTime.now();
     final analyticsManager = context.read<AnalyticsManager>();
     analyticsManager.startSession(widget.module.id);
   }
@@ -109,11 +112,23 @@ class _GameScreenState extends State<GameScreen>
     saveManager.incrementGamesPlayed();
     saveManager.updateHighScore(_score);
     
-    setState(() {
-      _showWinDialog = true;
-    });
+    final timeTaken = _gameStartTime != null 
+        ? DateTime.now().difference(_gameStartTime!).inSeconds
+        : 0;
     
-    _overlayController.forward();
+    // Show celebration screen instead of dialog
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => CelebrationScreen(
+          moduleName: widget.module.name,
+          score: _score,
+          timeTaken: timeTaken,
+          onContinue: () {
+            Navigator.of(context).pop(); // Go back to module selector
+          },
+        ),
+      ),
+    );
   }
 
   @override
