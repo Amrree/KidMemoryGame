@@ -1,0 +1,47 @@
+{
+  "id": "construction_site",
+  "name": "Construction Site",
+  "background": "background.png",
+  "cards": [
+    "cards/excavator.png",
+    "cards/bulldozer.png",
+    "cards/crane.png",
+    "cards/dump_truck.png",
+    "cards/cement_mixer.png",
+    "cards/steamroller.png",
+    "cards/forklift.png",
+    "cards/loader.png",
+    "cards/backhoe.png",
+    "cards/grader.png",
+    "cards/compactor.png",
+    "cards/paver.png",
+    "cards/drill.png",
+    "cards/hammer.png",
+    "cards/saw.png",
+    "cards/wrench.png"
+  ],
+  "icon": "cards/excavator.png",
+  "mascots": [
+    {
+      "image": "cards/excavator.png",
+      "rotation": 0,
+      "y": 500
+    },
+    {
+      "image": "cards/crane.png",
+      "rotation": 15,
+      "y": 600
+    },
+    {
+      "image": "cards/dump_truck.png",
+      "rotation": 30,
+      "y": 700
+    },
+    {
+      "image": "cards/bulldozer.png",
+      "rotation": 45,
+      "y": 800
+    }
+  ],
+  "hash": ""
+}

@@ -1,0 +1,49 @@
+{
+  "id": "weather_world",
+  "name": "Weather World",
+  "background": "background.png",
+  "cards": [
+    "cards/sun.png",
+    "cards/cloud.png",
+    "cards/rain.png",
+    "cards/snow.png",
+    "cards/lightning.png",
+    "cards/rainbow.png",
+    "cards/wind.png",
+    "cards/storm.png",
+    "cards/fog.png",
+    "cards/tornado.png",
+    "cards/hurricane.png",
+    "cards/blizzard.png",
+    "cards/hail.png",
+    "cards/sleet.png",
+    "cards/frost.png",
+    "cards/dew.png",
+    "cards/mist.png",
+    "cards/breeze.png"
+  ],
+  "icon": "cards/sun.png",
+  "mascots": [
+    {
+      "image": "cards/sun.png",
+      "rotation": 0,
+      "y": 500
+    },
+    {
+      "image": "cards/cloud.png",
+      "rotation": 15,
+      "y": 600
+    },
+    {
+      "image": "cards/rain.png",
+      "rotation": 30,
+      "y": 700
+    },
+    {
+      "image": "cards/rainbow.png",
+      "rotation": 45,
+      "y": 800
+    }
+  ],
+  "hash": ""
+}

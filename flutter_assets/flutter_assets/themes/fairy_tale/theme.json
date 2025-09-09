@@ -1,0 +1,43 @@
+{
+  "id": "fairy_tale",
+  "name": "Fairy Tale",
+  "background": "background.png",
+  "cards": [
+    "cards/princess.png",
+    "cards/prince.png",
+    "cards/dragon.png",
+    "cards/fairy.png",
+    "cards/unicorn.png",
+    "cards/giant.png",
+    "cards/magic_wand.png",
+    "cards/crown.png",
+    "cards/castle.png",
+    "cards/horse.png",
+    "cards/carriage.png",
+    "cards/sword.png"
+  ],
+  "icon": "cards/princess.png",
+  "mascots": [
+    {
+      "image": "cards/princess.png",
+      "rotation": 0,
+      "y": 500
+    },
+    {
+      "image": "cards/dragon.png",
+      "rotation": 15,
+      "y": 600
+    },
+    {
+      "image": "cards/fairy.png",
+      "rotation": 30,
+      "y": 700
+    },
+    {
+      "image": "cards/unicorn.png",
+      "rotation": 45,
+      "y": 800
+    }
+  ],
+  "hash": ""
+}

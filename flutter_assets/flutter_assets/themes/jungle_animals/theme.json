@@ -1,0 +1,49 @@
+{
+  "id": "jungle_animals",
+  "name": "Jungle Animals",
+  "background": "background.png",
+  "cards": [
+    "cards/tiger.png",
+    "cards/elephant.png",
+    "cards/monkey.png",
+    "cards/parrot.png",
+    "cards/snake.png",
+    "cards/frog.png",
+    "cards/butterfly.png",
+    "cards/toucan.png",
+    "cards/sloth.png",
+    "cards/jaguar.png",
+    "cards/panda.png",
+    "cards/koala.png",
+    "cards/giraffe.png",
+    "cards/zebra.png",
+    "cards/lion.png",
+    "cards/hippo.png",
+    "cards/rhino.png",
+    "cards/cheetah.png"
+  ],
+  "icon": "cards/tiger.png",
+  "mascots": [
+    {
+      "image": "cards/tiger.png",
+      "rotation": 0,
+      "y": 500
+    },
+    {
+      "image": "cards/elephant.png",
+      "rotation": 15,
+      "y": 600
+    },
+    {
+      "image": "cards/monkey.png",
+      "rotation": 30,
+      "y": 700
+    },
+    {
+      "image": "cards/parrot.png",
+      "rotation": 45,
+      "y": 800
+    }
+  ],
+  "hash": ""
+}

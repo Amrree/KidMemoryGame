@@ -1,0 +1,27 @@
+{
+  "app_info": {
+    "name": "Memory Match for Kids",
+    "version": "2.0.0",
+    "description": "Child-friendly memory matching game with beautiful AI-generated art",
+    "generated_at": "2025-09-09T03:02:40.109566"
+  },
+  "assets": {
+    "icons": {
+      "app_icons": "icons/",
+      "ui_elements": "ui/"
+    },
+    "backgrounds": "backgrounds/",
+    "themes": "themes/",
+    "splash": "splash/",
+    "loading": "loading/",
+    "logo": "logo/"
+  },
+  "themes": [
+    "space_adventure",
+    "jungle_animals",
+    "fairy_tale",
+    "underwater_world",
+    "construction_site",
+    "weather_world"
+  ]
+}
