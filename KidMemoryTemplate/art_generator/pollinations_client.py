@@ -28,7 +28,7 @@ class PollinationsClient:
     
     def __init__(self, referrer: str = "kid-memory-template"):
         self.referrer = referrer
-        self.base_url = "https://image.pollinations.ai"
+        self.base_url = "https://image.pollinations.ai/prompt"
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': f'KidMemoryTemplate/{referrer}',
@@ -58,8 +58,9 @@ class PollinationsClient:
         
         for attempt in range(retries):
             try:
+                # Use the correct Pollinations API endpoint format
                 response = self.session.get(
-                    f"{self.base_url}/{prompt}",
+                    self.base_url,
                     params=params,
                     timeout=30
                 )
@@ -69,6 +70,7 @@ class PollinationsClient:
                     return response.content
                 else:
                     print(f"Unexpected content type: {response.headers.get('content-type')}")
+                    print(f"Response text: {response.text[:200]}...")
                     
             except requests.exceptions.RequestException as e:
                 print(f"Attempt {attempt + 1} failed: {e}")
