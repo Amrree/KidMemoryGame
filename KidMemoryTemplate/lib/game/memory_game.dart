@@ -194,13 +194,20 @@ class MemoryCard extends PositionComponent with TapCallbacks {
 
     _isFlipped = !_isFlipped;
     
-    if (_isFlipped) {
-      remove(_backSprite);
-      add(_frontSprite);
-    } else {
-      remove(_frontSprite);
-      add(_backSprite);
-    }
+    // Add smooth flip animation with rotation
+    add(
+      FlipAnimationComponent(
+        onComplete: () {
+          if (_isFlipped) {
+            remove(_backSprite);
+            add(_frontSprite);
+          } else {
+            remove(_frontSprite);
+            add(_backSprite);
+          }
+        },
+      ),
+    );
   }
 
   void setMatched() {
@@ -210,20 +217,112 @@ class MemoryCard extends PositionComponent with TapCallbacks {
   }
 }
 
-/// Glow effect for matched cards
-class GlowEffect extends Component {
+/// Smooth flip animation for cards
+class FlipAnimationComponent extends Component {
+  final VoidCallback onComplete;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  
+  FlipAnimationComponent({required this.onComplete});
+  
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     
-    // Add a simple glow effect using a colored rectangle
-    final glow = RectangleComponent(
-      size: parent!.size,
-      paint: Paint()
-        ..color = Colors.green.withOpacity(0.3)
-        ..style = PaintingStyle.fill,
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
     );
     
-    add(glow);
+    _animation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+    
+    _controller.forward().then((_) {
+      onComplete();
+      removeFromParent();
+    });
+  }
+  
+  @override
+  void render(Canvas canvas) {
+    // Apply rotation transform for flip effect
+    canvas.save();
+    canvas.translate(size.x / 2, size.y / 2);
+    canvas.rotate(_animation.value * 3.14159); // 180 degrees
+    canvas.translate(-size.x / 2, -size.y / 2);
+    canvas.restore();
+  }
+  
+  @override
+  void onRemove() {
+    _controller.dispose();
+    super.onRemove();
+  }
+}
+
+/// Enhanced glow effect for matched cards
+class GlowEffect extends Component {
+  late AnimationController _glowController;
+  late Animation<double> _glowAnimation;
+  
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    
+    _glowController = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    
+    _glowAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _glowController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _glowController.repeat(reverse: true);
+    
+    // Add pulsing glow effect
+    add(
+      GlowComponent(
+        animation: _glowAnimation,
+      ),
+    );
+  }
+  
+  @override
+  void onRemove() {
+    _glowController.dispose();
+    super.onRemove();
+  }
+}
+
+/// Glow component with pulsing animation
+class GlowComponent extends Component {
+  final Animation<double> animation;
+  
+  GlowComponent({required this.animation});
+  
+  @override
+  void render(Canvas canvas) {
+    final paint = Paint()
+      ..color = Colors.green.withOpacity(animation.value * 0.5)
+      ..style = PaintingStyle.fill
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10);
+    
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, size.x, size.y),
+        const Radius.circular(12),
+      ),
+      paint,
+    );
   }
 }

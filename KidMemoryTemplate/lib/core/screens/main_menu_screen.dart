@@ -29,12 +29,12 @@ class _MainMenuScreenState extends State<MainMenuScreen>
 
   void _setupAnimations() {
     _logoController = AnimationController(
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 2000),
       vsync: this,
     );
     
     _buttonController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
 
@@ -45,12 +45,15 @@ class _MainMenuScreenState extends State<MainMenuScreen>
 
     _buttonAnimation = CurvedAnimation(
       parent: _buttonController,
-      curve: Curves.easeOutBack,
+      curve: Curves.easeOutCubic,
     );
 
+    // Staggered animation sequence
     _logoController.forward();
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _buttonController.forward();
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) {
+        _buttonController.forward();
+      }
     });
   }
 
@@ -217,39 +220,56 @@ class _MainMenuScreenState extends State<MainMenuScreen>
   Widget _buildMenuButton(String text, IconData icon, VoidCallback onTap) {
     return Consumer<AudioManager>(
       builder: (context, audioManager, child) {
-        return Container(
-          width: double.infinity,
-          height: 60,
-          margin: const EdgeInsets.symmetric(horizontal: 32),
-          child: ElevatedButton(
-            onPressed: () {
-              audioManager.playButtonClick();
-              onTap();
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
-              foregroundColor: const Color(0xFF4CAF50),
-              elevation: 8,
-              shadowColor: Colors.black.withOpacity(0.3),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, size: 24),
-                const SizedBox(width: 12),
-                Text(
-                  text,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+        return AnimatedBuilder(
+          animation: _buttonAnimation,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: _buttonAnimation.value,
+              child: Container(
+                width: double.infinity,
+                height: 60,
+                margin: const EdgeInsets.symmetric(horizontal: 32),
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      audioManager.playButtonClick();
+                      onTap();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFF4CAF50),
+                      elevation: 12,
+                      shadowColor: Colors.black.withOpacity(0.4),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      animationDuration: const Duration(milliseconds: 200),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AnimatedRotation(
+                          turns: _buttonAnimation.value * 0.1,
+                          duration: const Duration(milliseconds: 300),
+                          child: Icon(icon, size: 24),
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          text,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );

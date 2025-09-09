@@ -27,7 +27,7 @@ class _ModuleSelectorScreenState extends State<ModuleSelectorScreen>
 
   void _setupAnimations() {
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1200),
       vsync: this,
     );
 
@@ -40,11 +40,11 @@ class _ModuleSelectorScreenState extends State<ModuleSelectorScreen>
     ));
 
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
+      begin: const Offset(0, 0.5),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Curves.easeOutBack,
+      curve: Curves.easeOutCubic,
     ));
 
     _animationController.forward();
@@ -101,7 +101,23 @@ class _ModuleSelectorScreenState extends State<ModuleSelectorScreen>
                     itemCount: moduleManager.modules.length,
                     itemBuilder: (context, index) {
                       final module = moduleManager.modules[index];
-                      return _buildModuleCard(module);
+                      return AnimatedBuilder(
+                        animation: _animationController,
+                        builder: (context, child) {
+                          final delay = index * 0.1;
+                          final animationValue = Curves.easeOutCubic.transform(
+                            (_animationController.value - delay).clamp(0.0, 1.0),
+                          );
+                          
+                          return Transform.scale(
+                            scale: animationValue,
+                            child: Opacity(
+                              opacity: animationValue,
+                              child: _buildModuleCard(module),
+                            ),
+                          );
+                        },
+                      );
                     },
                   ),
                 ),
@@ -120,15 +136,20 @@ class _ModuleSelectorScreenState extends State<ModuleSelectorScreen>
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
           child: Card(
-            elevation: module.isUnlocked ? 8 : 4,
+            elevation: module.isUnlocked ? 12 : 6,
+            shadowColor: module.isUnlocked 
+                ? const Color(0xFF4CAF50).withOpacity(0.3)
+                : Colors.grey.withOpacity(0.3),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(20),
             ),
             child: InkWell(
               onTap: module.isUnlocked
                   ? () => _selectModule(module)
                   : () => _showLockedDialog(module),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(20),
+              splashColor: const Color(0xFF4CAF50).withOpacity(0.1),
+              highlightColor: const Color(0xFF4CAF50).withOpacity(0.05),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),

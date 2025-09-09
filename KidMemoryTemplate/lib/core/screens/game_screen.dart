@@ -127,21 +127,30 @@ class _GameScreenState extends State<GameScreen>
     return Scaffold(
       body: Stack(
         children: [
-        // Game view with background
-        Stack(
-          children: [
-            // Background image
-            if (widget.module.backgroundPath.isNotEmpty)
-              Positioned.fill(
-                child: Image.asset(
-                  widget.module.backgroundPath,
-                  fit: BoxFit.cover,
+          // Game view with background
+          Stack(
+            children: [
+              // Background image with fade-in animation
+              if (widget.module.backgroundPath.isNotEmpty)
+                AnimatedOpacity(
+                  opacity: 1.0,
+                  duration: const Duration(milliseconds: 1000),
+                  child: Positioned.fill(
+                    child: Image.asset(
+                      widget.module.backgroundPath,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
+              // Game widget with scale animation
+              AnimatedScale(
+                scale: 1.0,
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.easeOutBack,
+                child: GameWidget(game: _game),
               ),
-            // Game widget
-            GameWidget(game: _game),
-          ],
-        ),
+            ],
+          ),
           
           // UI overlay
           Positioned(
