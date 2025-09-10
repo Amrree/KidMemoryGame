@@ -1,0 +1,51 @@
+[
+  {
+    "id" : "sea",
+    "name" : "Sea Creatures",
+    "configPath" : "sea/theme.json",
+    "icon" : "cards/turtle.webp",
+    "hash" : "b6b142cffa5fc265062f0d283d63a3b66f1a8240c55ea9e0e9eb0fe0c50d82e5"
+  },
+  {
+    "id" : "dinosaurs",
+    "name" : "Dinosaurs",
+    "configPath" : "dinosaurs/theme.json",
+    "icon" : "cards/t-rex.webp",
+    "hash" : "46c677d32ea1e4d39f0ffded07e3dffd68c8375e21312e095c2cb4a52022188a"
+  },
+  {
+    "id" : "fruit",
+    "name" : "Fruit",
+    "configPath" : "fruit/theme.json",
+    "icon" : "cards/apple.webp",
+    "hash" : "c32d50afc24214110906ebf3c29ddcdf51ce964bb441bb94fb35b69608c7a842"
+  },
+  {
+    "id" : "colours",
+    "name" : "Colours",
+    "configPath" : "colours/theme.json",
+    "icon" : "icon.webp",
+    "hash" : "31525abb93646f17f97fb0dfda7c2abc352083c290f37df44bacbfbcd259d3dd"
+  },
+  {
+    "id" : "farm_animals",
+    "name" : "Farm Animals",
+    "configPath" : "farm_animals/theme.json",
+    "icon" : "cards/pig.webp",
+    "hash" : "663c343c1a0b2885a402944da1ab9bf22ea63755a50e92d23de3d842dac31205"
+  },
+  {
+    "id" : "city_vehicles",
+    "name" : "City Vehicles",
+    "configPath" : "city_vehicles/theme.json",
+    "icon" : "cards/car.png",
+    "hash" : "743fc0e26e154e3737814fd92af27259205a76d67316d51b2565f2e3ac11f931"
+  },
+  {
+    "id" : "zoo",
+    "name" : "ZOO",
+    "configPath" : "zoo/theme.json",
+    "icon" : "cards/giraffe.png",
+    "hash" : "887726be3dee5ffb696cfaf92e5117b84832994f1fda4f18761037240cbb1afe"
+  }
+]

@@ -1,0 +1,153 @@
+name: Build APP
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        task:
+          - assembleFullRelease
+          - assembleLiteRelease
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Extract directory
+        id: extract_name
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            const match = '${{ matrix.task }}'.match(/assemble([A-Z].+?)Release/i);
+            return match ? match[1].toLowerCase() : '';
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+      - name: Build with Gradle
+        run: ./gradlew ${{ matrix.task }}
+      - name: Sign Android release
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/apk/${{ steps.extract_name.outputs.result }}/release/
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.extract_name.outputs.result }}
+          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
+          if-no-files-found: error
+          retention-days: 1
+  build_play_store:
+    name: Build AAB
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Setup build tool version variable
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+      - name: Build with Gradle
+        run: |
+          ./gradlew bundlePlaystoreRelease
+          ./gradlew bundlePlaystoreRelease -PincludeAssetPacks=true
+      - name: Sign Android release
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/bundle/playstoreRelease/
+          signingKeyBase64: ${{ secrets.UPLOAD_KEY }}
+          alias: ${{ secrets.UPLOAD_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.UPLOAD_KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.UPLOAD_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: playstore
+          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
+          if-no-files-found: error
+          retention-days: 1
+
+  create_release:
+    name: Create a release
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    if: github.event_name == 'push'
+    permissions:
+      contents: write
+    steps:
+      - name: Extract version name
+        id: extract_name
+        uses: actions/github-script@v7
+        with:
+          result-encoding: string
+          script: |
+            return context.payload.ref.replace(/refs\/tags\/v/, '');
+      - name: Download (full)
+        uses: actions/download-artifact@v4
+        with:
+          name: full
+          path: full
+      - name: Download (lite)
+        uses: actions/download-artifact@v4
+        with:
+          name: lite
+          path: lite
+      - name: Rename files
+        run: |
+          mv full/*.apk cz.chrastecky.kidsmemorygame_${{ steps.extract_name.outputs.result }}_full.apk
+          mv lite/*.apk cz.chrastecky.kidsmemorygame_${{ steps.extract_name.outputs.result }}_lite.apk
+      - name: Create a release
+        uses: softprops/action-gh-release@v2.2.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: ${{ steps.extract_name.outputs.result }}
+          body: |
+            - The `full` variant contains all the images inside the apk and thus is larger.
+            - The `lite` variant doesn't contain any card files but offers to download them.
+            
+            Meaning the `full` variant is self-contained and doesn't need access to the internet at all (in fact, it doesn't even have permission to access internet), while the `lite` version has smaller size (and thus smaller download size for updates), but needs internet to access the card data.
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: true
+          generate_release_notes: true
+          make_latest: true
+          files: |
+            cz.chrastecky.kidsmemorygame_${{ steps.extract_name.outputs.result }}_full.apk
+            cz.chrastecky.kidsmemorygame_${{ steps.extract_name.outputs.result }}_lite.apk

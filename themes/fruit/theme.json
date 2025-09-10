@@ -1,0 +1,40 @@
+{
+  "id" : "fruit",
+  "name" : "Fruit",
+  "background" : "background.webp",
+  "cards" : [
+    "cards/apple.webp",
+    "cards/banana.webp",
+    "cards/blueberry.webp",
+    "cards/cherry.webp",
+    "cards/coconut.webp",
+    "cards/grapes.webp",
+    "cards/lemon.webp",
+    "cards/orange.webp",
+    "cards/peach.webp",
+    "cards/pear.webp",
+    "cards/pineapple.webp",
+    "cards/plum.webp",
+    "cards/strawberry.webp",
+    "cards/watermelon.webp"
+  ],
+  "icon" : "cards/apple.webp",
+  "mascots" : [
+    {
+      "image" : "cards/apple.webp",
+      "rotation" : 0,
+      "y" : 721
+    },
+    {
+      "image" : "cards/banana.webp",
+      "rotation" : 0,
+      "y" : 661
+    },
+    {
+      "image" : "cards/strawberry.webp",
+      "rotation" : 0,
+      "y" : 680
+    }
+  ],
+  "hash" : "c32d50afc24214110906ebf3c29ddcdf51ce964bb441bb94fb35b69608c7a842"
+}

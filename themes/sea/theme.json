@@ -1,0 +1,65 @@
+{
+  "id" : "sea",
+  "name" : "Sea Creatures",
+  "background" : "background.webp",
+  "cards" : [
+    "cards/anglerfish.webp",
+    "cards/blue-tang.webp",
+    "cards/clownfish.webp",
+    "cards/crab.webp",
+    "cards/dolphin.webp",
+    "cards/giant-clam.webp",
+    "cards/hammerhead.webp",
+    "cards/horsefish.webp",
+    "cards/jellyfish.webp",
+    "cards/lobster.webp",
+    "cards/manta-ray.webp",
+    "cards/moray-eel.webp",
+    "cards/octopus.webp",
+    "cards/orca.webp",
+    "cards/penguin.webp",
+    "cards/pufflefish.webp",
+    "cards/sea-snail.webp",
+    "cards/sea-urchin.webp",
+    "cards/sea_lion.webp",
+    "cards/seal.webp",
+    "cards/shark.webp",
+    "cards/starfish.webp",
+    "cards/swordfish.webp",
+    "cards/turtle.webp"
+  ],
+  "icon" : "cards/turtle.webp",
+  "mascots" : [
+    {
+      "image" : "cards/dolphin.webp",
+      "rotation" : 45,
+      "y" : 666
+    },
+    {
+      "image" : "cards/hammerhead.webp",
+      "rotation" : 22,
+      "y" : 762
+    },
+    {
+      "image" : "cards/jellyfish.webp",
+      "rotation" : 0,
+      "y" : 505
+    },
+    {
+      "image" : "cards/lobster.webp",
+      "rotation" : 0,
+      "y" : 560
+    },
+    {
+      "image" : "cards/penguin.webp",
+      "rotation" : 0,
+      "y" : 480
+    },
+    {
+      "image" : "cards/starfish.webp",
+      "rotation" : 0,
+      "y" : 622
+    }
+  ],
+  "hash" : "b6b142cffa5fc265062f0d283d63a3b66f1a8240c55ea9e0e9eb0fe0c50d82e5"
+}

@@ -1,0 +1,38 @@
+{
+  "id" : "dinosaurs",
+  "name" : "Dinosaurs",
+  "background" : "background.webp",
+  "cards" : [
+    "cards/ankylosaurus.webp",
+    "cards/brachiosaurus.webp",
+    "cards/carnotaurus.webp",
+    "cards/dilophosaurus.webp",
+    "cards/pachycephalosaurus.webp",
+    "cards/parasaurolophus.webp",
+    "cards/pterodactylus.webp",
+    "cards/spinosaurus.webp",
+    "cards/stegosaurus.webp",
+    "cards/t-rex.webp",
+    "cards/triceratops.webp",
+    "cards/velociraptor.webp"
+  ],
+  "icon" : "cards/t-rex.webp",
+  "mascots" : [
+    {
+      "image" : "cards/pterodactylus.webp",
+      "rotation" : 0,
+      "y" : 600
+    },
+    {
+      "image" : "cards/t-rex.webp",
+      "rotation" : 0,
+      "y" : 495
+    },
+    {
+      "image" : "cards/velociraptor.webp",
+      "rotation" : 45,
+      "y" : 581
+    }
+  ],
+  "hash" : "46c677d32ea1e4d39f0ffded07e3dffd68c8375e21312e095c2cb4a52022188a"
+}

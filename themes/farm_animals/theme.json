@@ -1,0 +1,41 @@
+{
+  "id" : "farm_animals",
+  "name" : "Farm Animals",
+  "background" : "background.webp",
+  "cards" : [
+    "cards/bee.webp",
+    "cards/cat.webp",
+    "cards/chicken.webp",
+    "cards/cow.webp",
+    "cards/dog.webp",
+    "cards/donkey.webp",
+    "cards/duck.webp",
+    "cards/goat.webp",
+    "cards/goose.webp",
+    "cards/horse.webp",
+    "cards/pig.webp",
+    "cards/rabbit.webp",
+    "cards/rooster.webp",
+    "cards/sheep.webp",
+    "cards/turkey.webp"
+  ],
+  "icon" : "cards/pig.webp",
+  "mascots" : [
+    {
+      "image" : "cards/bee.webp",
+      "rotation" : 45,
+      "y" : 832
+    },
+    {
+      "image" : "cards/goose.webp",
+      "rotation" : 0,
+      "y" : 460
+    },
+    {
+      "image" : "cards/pig.webp",
+      "rotation" : 30,
+      "y" : 860
+    }
+  ],
+  "hash" : "663c343c1a0b2885a402944da1ab9bf22ea63755a50e92d23de3d842dac31205"
+}
